@@ -1,0 +1,4 @@
+-r base.txt
+
+# Add Tensorflow GPU for local development
+tensorflow-gpu==1.8.0
