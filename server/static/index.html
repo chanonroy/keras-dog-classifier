@@ -7,7 +7,35 @@
      <title> Dog Classifier </title>
    </head>
    <body>
-     <input id="name-input" type="text">
-     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+      <input id="image-selector" type="file">
+      <button id="predict-button"> Predict </button>
+      <p style="font-weight: bold"> Predict </p>
+      <img id="selected-image" src="" />
+
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+      <script>
+        var base64Image;
+        $("#image-selector").change(function() {
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+              var dataUrl = reader.result;
+              $("#selected-image").attr("src", dataUrl);
+              base64Image = dataUrl.replace("data:image/png;base64,","");
+              console.log(base64Image);
+            }
+            
+            reader.readAsDataURL($("#image-selector")[0].files[0]);
+        });
+
+        $("#predict-button").click(function(event) {
+			var message = {
+				image: base64Image
+			}
+			$.post("/predict", JSON.stringify(message), function(response){
+				console.log(response);
+			});
+        });
+      </script>
    </body>
  </html>
