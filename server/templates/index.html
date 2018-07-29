@@ -1,46 +1,51 @@
 <!DOCTYPE html>
  <html>
-   <head>
-     <meta charset="utf-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-     <meta name="viewport" content="width=device-width, initial-scale=1">
-     <title> Dog Classifier </title>
-   </head>
-   <body>
-      <input id="image-selector" type="file">
-      <button id="predict-button"> Predict </button>
-      <p style="font-weight: bold"> Predict </p>
-	  <img id="selected-image" src="" />
-	  <p id="prediction-1"></p>
-	  <p id="prediction-2"></p>
-	  <p id="prediction-3"></p>
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title> Dog Classifier </title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.5/theme-chalk/index.css">
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dist/css/main.css') }}">
+    </head>
+    <body>
+        <div id="app"></div>
 
-      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-      <script>
-        var base64Image;
-        $("#image-selector").change(function() {
-            var reader = new FileReader();
-            
-            reader.onload = function(e) {
-              var dataUrl = reader.result;
-              $("#selected-image").attr("src", dataUrl);
-              base64Image = dataUrl.replace("data:image/png;base64,","");
-              console.log(base64Image);
-            }
-            
-            reader.readAsDataURL($("#image-selector")[0].files[0]);
-        });
+        <input id="image-selector" type="file">
+        <button id="predict-button"> Predict </button>
+        <p style="font-weight: bold"> Predict </p>
+        <img id="selected-image" src="" />
+        <p id="prediction-1"></p>
+        <p id="prediction-2"></p>
+        <p id="prediction-3"></p>
 
-        $("#predict-button").click(function(event) {
-			var message = {
-				image: base64Image
-			}
-			$.post("/predict", JSON.stringify(message), function(response){
-				$("#prediction-1").text(response.prediction[0].name.name + ' ' + response.prediction[0].confidence);
-				$("#prediction-2").text(response.prediction[1].name.name + ' ' + response.prediction[1].confidence);
-				$("#prediction-3").text(response.prediction[2].name.name + ' ' + response.prediction[2].confidence);
-			});
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="{{ url_for('static', filename='dist/js/main.js') }}"></script>
+        <script>
+          var base64Image;
+          $("#image-selector").change(function() {
+              var reader = new FileReader();
+              
+              reader.onload = function(e) {
+                var dataUrl = reader.result;
+                $("#selected-image").attr("src", dataUrl);
+                base64Image = dataUrl.replace("data:image/png;base64,","");
+                console.log(base64Image);
+              }
+              
+              reader.readAsDataURL($("#image-selector")[0].files[0]);
+          });
+
+          $("#predict-button").click(function(event) {
+        var message = {
+          image: base64Image
+        }
+        $.post("/predict", JSON.stringify(message), function(response){
+          $("#prediction-1").text(response.prediction[0].name.name + ' ' + response.prediction[0].confidence);
+          $("#prediction-2").text(response.prediction[1].name.name + ' ' + response.prediction[1].confidence);
+          $("#prediction-3").text(response.prediction[2].name.name + ' ' + response.prediction[2].confidence);
         });
-      </script>
-   </body>
+          });
+        </script>
+    </body>
  </html>

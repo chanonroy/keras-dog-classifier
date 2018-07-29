@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var path = require('path');
 
 var BASE_DIR = path.resolve(__dirname, './static');
@@ -11,32 +12,32 @@ const config = {
     },
     output: {
         path: DIST_DIR,
-        filename: '[name].js'
+        filename: 'js/[name].js'
     },
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: 'babel-loader'
             },
             {
+                // CSS Loader
+                test: /\.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    "css-loader?minimize", // css-loader?minimize
+                ]
+            },
+            {
+                // Style Loaders (Sass, PostCSS)
                 test: /\.scss$/,
                 use: [
-                {
-                    loader: 'style-loader'
-                },
-                {
-                    loader: "css-loader?minimize"
-                },
-                {
-                    loader: "postcss-loader",
-                    options: { plugins() { return [require('autoprefixer')({ browsers: ['last 3 versions'] })]; } }
-                },
-                {
-                    loader: "sass-loader"
-                }
-                ],
+                    MiniCssExtractPlugin.loader,
+                    "css-loader?minimize", // css-loader?minimize
+                    "postcss-loader",
+                    "sass-loader"
+                ]
             },
             {
                 test: /\.(png|jpg|jpeg|gif|ico|svg)$/,
@@ -46,7 +47,12 @@ const config = {
                 },
             }
         ]
-    }
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: "css/[name].css"
+        })
+    ]
 };
 
 module.exports = config;
