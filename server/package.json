@@ -1,0 +1,39 @@
+{
+  "name": "dog-classifier",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "engines": {
+    "node": ">=8.11.3"
+  },
+  "scripts": {
+    "dev": "webpack --mode development --watch --hide-modules",
+    "build": "webpack --mode production --hide-modules"
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "react",
+      "es2016"
+    ]
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "cross-env": "^5.2.0",
+    "file-loader": "^1.1.11",
+    "node-sass": "^4.9.2",
+    "postcss-loader": "^2.1.6",
+    "sass-loader": "^7.0.3",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.16.3",
+    "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
+  }
+}

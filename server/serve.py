@@ -14,22 +14,25 @@ from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
-MODEL_PATH = './models/'
+MODEL_PATH = './models/inception-300.h5'
 IMG_SIZE = 300
 
 def get_model():
+    # Initialize model and save into memory
     global model
-    model = load_model(MODEL_PATH + 'inception-300.h5')
+    model = load_model(MODEL_PATH)
     model._make_predict_function()
     print('Model Loaded')
 
 def load_dog_name_map():
+    # Read JSON file to prepare dog verbose name hashtable
     with open('dog_map.json') as f:
         mapping = json.load(f)
         print('Dog name map loaded')
         return mapping
 
 def preprocess_image(image, target_size):
+    # Prepare image array for use in model.predict(img_array)
     if image.mode != "RGB":
         image = image.convert("RGB")
 

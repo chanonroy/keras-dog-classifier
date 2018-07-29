@@ -3,3 +3,4 @@ train/images
 __pycache__
 ./models
 inception-300.h5
+node_modules
