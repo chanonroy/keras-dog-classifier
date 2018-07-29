@@ -3,13 +3,14 @@ import base64
 import numpy as np
 import io
 import json
+import random
 from PIL import Image
 
 import keras
 from keras import backend as K
 from keras.models import Sequential, load_model
 from keras.preprocessing.image import ImageDataGenerator, img_to_array, load_img
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
@@ -32,20 +33,19 @@ def preprocess_image(image, target_size):
     if image.mode != "RGB":
         image = image.convert("RGB")
 
-    # Write photo to disk, TODO: need to read from memory while using load_img generator
-    file_name = 'dog' + '.' + image.format
-    image.save(file_name)
-    img = load_img(file_name, target_size=target_size)
-    os.remove(file_name)
+    img = image.resize(target_size)
+    img = img_to_array(img)
+    img = np.expand_dims(img, axis=0)
+    img = img/255
 
-    x = img_to_array(img)
-    x = x.reshape((1,) + x.shape)
-    x = x/255
-
-    return x
+    return img
 
 get_model()
 DOG_NAME_MAP = load_dog_name_map()
+
+@app.route("/")
+def home():
+    return render_template('index.html')
 
 @app.route("/predict", methods=["POST"])
 def predict():
